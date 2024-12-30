@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-@Service
+
 public class CVGenerator {
 
     private final Locale locale = new Locale("de");

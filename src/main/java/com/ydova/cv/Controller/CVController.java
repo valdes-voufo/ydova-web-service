@@ -8,6 +8,7 @@ import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.service.GmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,19 +18,21 @@ import java.util.List;
 
 @RestController
 public class CVController {
-    private final CVGenerator cvGenerator ;
+
     private  final GmailService gmailService ;
 
     @Autowired
-    public CVController(GmailService gmailService,CVGenerator cvGenerator) {
+    public CVController(GmailService gmailService) {
         this.gmailService = gmailService;
-        this.cvGenerator = cvGenerator;
     }
 
 
 
     @PostMapping("/cv")
-    public void buildCV(CVDto cvDto ) {
+    public void buildCV(@RequestBody CVDto cvDto ) {
+        CVGenerator cvGenerator = new CVGenerator() ;
+
+        Log.info("Building CV:"+cvDto,this.getClass());
 
         File cv;
         try {
