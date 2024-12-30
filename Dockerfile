@@ -1,15 +1,8 @@
+FROM maven:3.8.5-openjdk-17 AS build
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Use a base image
-FROM openjdk:17-jdk-slim
-
-# Set the working directory
-WORKDIR /app
-
-# Copy application JAR file into the container
-COPY mail.service-1.0.0.jar app.jar
-
-# Expose the application port
+FROM openjdk:17.0.1-jdk-slim
+COPY --from=build /target/ydova.web.service-1.0.0.jar app.jar
 EXPOSE 8080
-
-# Command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
