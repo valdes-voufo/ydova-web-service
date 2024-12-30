@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.ydova</groupId>
     <artifactId>ydova.web.service</artifactId>
@@ -20,6 +20,11 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
+            <id>gitlab-maven</id>
+            <url>https://git.rwth-aachen.de/api/v4/projects/107795/packages/maven</url>
         </repository>
     </repositories>
 
@@ -39,6 +44,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.ydova</groupId>
+            <artifactId>ydova.web.cv</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,6 +88,8 @@
 
 
 
+
+
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
@@ -89,6 +103,20 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+
+
+    <distributionManagement>
+        <repository>
+            <id>gitlab-maven</id>
+            <url>https://git.rwth-aachen.de/api/v4/projects/107795/packages/maven</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>gitlab-maven</id>
+            <url>https://git.rwth-aachen.de/api/v4/projects/107795/packages/maven</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <plugins>

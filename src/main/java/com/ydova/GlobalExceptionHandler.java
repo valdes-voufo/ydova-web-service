@@ -1,4 +1,4 @@
-package com.ydova.mail.config;
+package com.ydova;
 
 
 import org.springframework.http.HttpStatus;

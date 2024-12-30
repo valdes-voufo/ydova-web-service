@@ -10,7 +10,8 @@ public class Log {
         log.info(msg);
     }
 
-    public static void error(String msg){
+
+    public static void error(String msg) {
         Logger log = LoggerFactory.getLogger(Log.class);
         log.info(msg);
         log.error(msg);
