@@ -1,16 +1,13 @@
 package com.ydova.cv.Controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ydova.Log;
 import com.ydova.cv.CVGenerationException;
-import com.ydova.cv.CVGenerator;
+import com.ydova.cv.service.CVGenerator;
 import com.ydova.cv.dto.CVDto;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.service.GmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,12 +17,13 @@ import java.util.List;
 
 @RestController
 public class CVController {
-    private final CVGenerator cvGenerator = new CVGenerator();
+    private final CVGenerator cvGenerator ;
     private  final GmailService gmailService ;
 
     @Autowired
-    public CVController(GmailService gmailService) {
+    public CVController(GmailService gmailService,CVGenerator cvGenerator) {
         this.gmailService = gmailService;
+        this.cvGenerator = cvGenerator;
     }
 
 

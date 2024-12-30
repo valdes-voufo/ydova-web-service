@@ -45,11 +45,7 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.ydova</groupId>
-            <artifactId>ydova.web.cv</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
 
 
         <dependency>
@@ -102,7 +98,10 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
+
 
 
 
@@ -117,6 +116,8 @@
             <url>https://git.rwth-aachen.de/api/v4/projects/107795/packages/maven</url>
         </snapshotRepository>
     </distributionManagement>
+
+
 
     <build>
         <plugins>
