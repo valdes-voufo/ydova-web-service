@@ -8,16 +8,22 @@ variables:
 # Build Stage
 build:
   stage: build
+  image: docker:latest   # Use a Docker image with Docker support
+  services:
+    - docker:19.03.12-dind  # Enable Docker-in-Docker (DinD)
   script:
-    - docker build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry . .
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-    - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
+    - docker build -t $IMAGE_TAG .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker push $IMAGE_TAG
   only:
     - main
 
 # Deploy Stage
 deploy:
   stage: deploy
+  image: docker:latest   # Use a Docker image with Docker support
+  services:
+    - docker:19.03.12-dind  # Enable Docker-in-Docker (DinD)
   script:
     # Install sshpass for SSH access to EC2
     - apt-get update && apt-get install -y sshpass
@@ -25,9 +31,9 @@ deploy:
     # SSH into EC2 and deploy Docker container
     - sshpass -p $EC2_SSH_PASSWORD ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP "
       docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME && \
-      docker stop ydova-web-service || true && \
-      docker rm ydova-web-service || true && \
-      docker run -d --name ydova-web-service -p 8080:8080 $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+      docker stop springboot-app || true && \
+      docker rm springboot-app || true && \
+      docker run -d --name springboot-app -p 8080:8080 $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
       "
   only:
     - main
