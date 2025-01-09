@@ -7,12 +7,15 @@ variables:
   SSH_HOST: your-ec2-public-ip
   SSH_USER: ubuntu
   SSH_PORT: 22
+  DOCKER_DRIVER: overlay2 # This ensures the right storage driver is used
+  DOCKER_HOST: tcp://docker:2375 # This is the Docker-in-Docker connection
 
 build:
   stage: build
   image: docker:latest
   services:
-    - docker:dind
+    - name: docker:19.03.12-dind
+      alias: docker
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
     - docker build -t $DOCKER_IMAGE:latest .
