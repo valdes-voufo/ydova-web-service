@@ -3,35 +3,31 @@ stages:
   - deploy
 
 variables:
-  DOCKER_IMAGE: your-dockerhub-username/ydova-web-service
-  SSH_HOST: your-ec2-public-ip
-  SSH_USER: ubuntu
-  SSH_PORT: 22
-  DOCKER_DRIVER: overlay2 # This ensures the right storage driver is used
-  DOCKER_HOST: tcp://docker:2375 # This is the Docker-in-Docker connection
+  IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
 
+# Build Stage
 build:
   stage: build
-  image: docker:latest
-  services:
-    - name: docker:19.03.12-dind
-      alias: docker
   script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker build -t $DOCKER_IMAGE:latest .
-    - docker push $DOCKER_IMAGE:latest
+    - docker build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry . .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
+    - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
+  only:
+    - main
 
+# Deploy Stage
 deploy:
   stage: deploy
   script:
-    - apk add --no-cache openssh-client
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
-    - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << EOF
-      docker pull $DOCKER_IMAGE:latest
-      docker stop ydova-web-service || true
-      docker rm ydova-web-service || true
-      docker run -d --name ydova-web-service -p 8080:8080 $DOCKER_IMAGE:latest
-      EOF
+    # Install sshpass for SSH access to EC2
+    - apt-get update && apt-get install -y sshpass
+
+    # SSH into EC2 and deploy Docker container
+    - sshpass -p $EC2_SSH_PASSWORD ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP "
+      docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME && \
+      docker stop ydova-web-service || true && \
+      docker rm ydova-web-service || true && \
+      docker run -d --name ydova-web-service -p 8080:8080 $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+      "
+  only:
+    - main
