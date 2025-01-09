@@ -14,11 +14,11 @@ build:
     - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<'EOF'
       # Navigate to or create the project directory
     - cd /home/ec2-user || exit
-      rm -rf ydova-web-service
-      git clone git@git.rwth-aachen.de:ydova/ydova-web-service.git ydova-web-service
-      fi
-      cd ydova-web-service
-      ls
+    -  rm -rf ydova-web-service
+    -  git clone git@git.rwth-aachen.de:ydova/ydova-web-service.git ydova-web-service
+    -  fi
+    -  cd ydova-web-service
+    -  ls
       
       # Pull the latest changes from the main branch
     -  git checkout main
