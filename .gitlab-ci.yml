@@ -2,31 +2,17 @@ stages:
   - build
   - deploy
 
+
+variables:
+  IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+
 # Build Stage
 build:
   stage: build
   script:
-    # Ensure SSH key is loaded into the agent
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
-
-    # SSH into EC2 and execute build commands
-    - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<'EOF'
-      # Navigate to or create the project directory
-    - cd /home/ec2-user || exit
-    -  rm -rf ydova-web-service
-    -  git clone git@git.rwth-aachen.de:ydova/ydova-web-service.git ydova-web-service
-    -  fi
-    -  cd ydova-web-service
-    -  ls
-      
-      # Pull the latest changes from the main branch
-    -  git checkout main
-      git pull origin main
-      
-      # Build the Docker image
-    -  docker build 
-
+    - docker buildx build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
+    - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
   only:
     - main
 
@@ -38,17 +24,13 @@ deploy:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
-    # SSH into EC2 and execute deployment commands
-    - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<'EOF'
-      # Stop and remove any running instance of the application
-    -  docker stop ydova-web-service || true
-      docker rm ydova-web-service || true
-      
-      # Clean up unused images to save disk space
-    -  docker system prune -f
-      
-      # Run the newly built Docker image
-    -  docker run -d --name ydova-web-service -p 8080:8080 my-app:latest
-      EOF
+    # SSH into EC2 and deploy Docker container
+    - ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
+    - docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry
+    - docker stop ydova-web-service || true
+    - docker rm ydova-web-service || true
+    - docker run -d --name ydova-web-service -p 8080:8080 registry.git.rwth-aachen.de/ydova/ydova-package-registry
+
   only:
     - main
