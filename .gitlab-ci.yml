@@ -20,9 +20,6 @@ build:
 deploy:
   stage: deploy
   script:
-    # Ensure SSH key is loaded into the agent
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
     # SSH into EC2 and deploy Docker container
     - ssh -o "$SSH_PRIVATE_KEY"  ec2-user@3.84.219.44
