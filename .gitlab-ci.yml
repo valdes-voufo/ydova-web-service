@@ -10,9 +10,10 @@ variables:
 build:
   stage: build
   script:
-    - docker buildx build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry .
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-    - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
+    - docker buildx build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry --load .
+
+  #  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
+  #  - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
   only:
     - main
 
@@ -21,13 +22,13 @@ deploy:
   stage: deploy
   script:
     # Ensure SSH key is loaded into the agent
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
+  #  - eval $(ssh-agent -s)
+  #  - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
     # SSH into EC2 and deploy Docker container
-    - ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-    - docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry
+  #  - ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP
+  #  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
+  #  - docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry
     - docker stop ydova-web-service || true
     - docker rm ydova-web-service || true
     - docker run -d --name ydova-web-service -p 8080:8080 registry.git.rwth-aachen.de/ydova/ydova-package-registry
