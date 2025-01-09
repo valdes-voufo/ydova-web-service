@@ -13,18 +13,18 @@ build:
     # SSH into EC2 and execute build commands
     - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<'EOF'
       # Navigate to or create the project directory
-      cd /home/ec2-user || exit
+    - cd /home/ec2-user || exit
       if [ ! -d "ydova-web-service" ]; then
       git clone git@git.rwth-aachen.de:ydova/ydova-web-service.git ydova-web-service
       fi
       cd ydova-web-service
       
       # Pull the latest changes from the main branch
-      git checkout main
+    -  git checkout main
       git pull origin main
       
       # Build the Docker image
-      docker build -t my-app:latest .
+    -  docker build -t my-app:latest .
       EOF
   only:
     - main
@@ -40,14 +40,14 @@ deploy:
     # SSH into EC2 and execute deployment commands
     - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<'EOF'
       # Stop and remove any running instance of the application
-      docker stop ydova-web-service || true
+    -  docker stop ydova-web-service || true
       docker rm ydova-web-service || true
       
       # Clean up unused images to save disk space
-      docker system prune -f
+    -  docker system prune -f
       
       # Run the newly built Docker image
-      docker run -d --name ydova-web-service -p 8080:8080 my-app:latest
+    -  docker run -d --name ydova-web-service -p 8080:8080 my-app:latest
       EOF
   only:
     - main
