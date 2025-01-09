@@ -20,15 +20,16 @@ build:
 deploy:
   stage: deploy
   script:
-    # Install sshpass for SSH access to EC2
-    - apt-get update && apt-get install -y sshpass
+    # Ensure SSH key is loaded into the agent
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
     # SSH into EC2 and deploy Docker container
-    - sshpass -p $EC2_SSH_PASSWORD ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP "
+    - ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP 
       docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME && \
       docker stop ydova-web-service || true && \
       docker rm ydova-web-service || true && \
       docker run -d --name ydova-web-service -p 8080:8080 $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-      "
+
   only:
     - main
