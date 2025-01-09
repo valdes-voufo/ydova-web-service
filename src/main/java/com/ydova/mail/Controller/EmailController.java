@@ -52,7 +52,7 @@ public class EmailController {
 
     @GetMapping("/")
     public String get() {
-        return "Welcome to Ydova mail Service";
+        return "Welcome to YDOVA WEB SEVER";
     }
 
     private File convertMultipartFileToFile(MultipartFile multipartFile)  {
