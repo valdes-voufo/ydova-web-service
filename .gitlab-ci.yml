@@ -2,10 +2,6 @@ stages:
   - build
   - deploy
 
-
-variables:
-  IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
-
 # Build Stage
 build:
   stage: build
@@ -14,14 +10,22 @@ build:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
-    # SSH into EC2 and execute deployment commands
-    - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<EOF
-    - docker buildx create --use
-    - docker buildx inspect --bootstrap
-    - docker buildx build  --platform linux/amd64  -t registry.git.rwth-aachen.de/ydova/ydova-package-registry .
+    # SSH into EC2 and execute build commands directly
+    - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<'EOF'
+      # Navigate to or create the directory for the project
+      cd /home/ec2-user || exit
+      if [ ! -d "project-directory" ]; then
+      git clone git@git.rwth-aachen.de:ydova/ydova-web-service.git ydova-web-service
+      fi
+      cd project-directory
 
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-    - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
+      # Pull the latest changes
+      git checkout main
+      git pull origin main
+
+      # Build the Docker image
+      docker build -t my-app:latest .
+      EOF
   only:
     - main
 
@@ -34,13 +38,13 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
     # SSH into EC2 and execute deployment commands
-    -  ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<EOF
-    -  docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-    -  docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry:latest
-    -  docker stop ydova-web-service || true
-    -  docker rm ydova-web-service || true
-    -  docker run -d --name ydova-web-service -p 8080:8080 registry.git.rwth-aachen.de/ydova/ydova-package-registry:latest
+    - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<'EOF'
+      # Stop and remove any running instance of the application
+      docker stop ydova-web-service || true
+      docker rm ydova-web-service || true
+
+      # Run the newly built image
+      docker run -d --name ydova-web-service -p 8080:8080 my-app:latest
       EOF
   only:
     - main
-
