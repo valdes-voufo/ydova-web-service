@@ -27,10 +27,10 @@ deploy:
     # SSH into EC2 and execute deployment commands
     -  ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<EOF
     -  docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-    -  docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry
+    -  docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry:latest
     -  docker stop ydova-web-service || true
     -  docker rm ydova-web-service || true
-    -  docker run -d --name ydova-web-service -p 8080:8080 registry.git.rwth-aachen.de/ydova/ydova-package-registry
+    -  docker run -d --name ydova-web-service -p 8080:8080 registry.git.rwth-aachen.de/ydova/ydova-package-registry:latest
       EOF
   only:
     - main
