@@ -18,7 +18,7 @@ build:
       git clone git@git.rwth-aachen.de:ydova/ydova-web-service.git ydova-web-service
       fi
       cd ydova-web-service
-
+      ls
       
       # Pull the latest changes from the main branch
     -  git checkout main
@@ -26,7 +26,7 @@ build:
       
       # Build the Docker image
     -  docker build 
-      EOF
+
   only:
     - main
 
