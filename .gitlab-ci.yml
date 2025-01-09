@@ -7,14 +7,14 @@ variables:
   IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
 
 # Build Stage
-#build:
-#  stage: build
-#  script:
-#    - docker buildx build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry .
-#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-#    - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
-#  only:
-#    - main
+build:
+  stage: build
+  script:
+    - docker build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
+    - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
+  only:
+    - main
 
 # Deploy Stage
 deploy:
