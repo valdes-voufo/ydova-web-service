@@ -26,11 +26,11 @@ deploy:
 
     # SSH into EC2 and deploy Docker container
     - ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP
-      docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin && \
-      docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME && \
-      docker stop ydova-web-service || true && \
-      docker rm ydova-web-service || true && \
-      docker run -d --name ydova-web-service -p 8080:8080 $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker stop ydova-web-service || true
+    - docker rm ydova-web-service || true
+    - docker run -d --name ydova-web-service -p 8080:8080 $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
   only:
     - main
