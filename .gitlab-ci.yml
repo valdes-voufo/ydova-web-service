@@ -1,0 +1,34 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_IMAGE: your-dockerhub-username/ydova-web-service
+  SSH_HOST: your-ec2-public-ip
+  SSH_USER: ubuntu
+  SSH_PORT: 22
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    - docker build -t $DOCKER_IMAGE:latest .
+    - docker push $DOCKER_IMAGE:latest
+
+deploy:
+  stage: deploy
+  script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
+    - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << EOF
+      docker pull $DOCKER_IMAGE:latest
+      docker stop ydova-web-service || true
+      docker rm ydova-web-service || true
+      docker run -d --name ydova-web-service -p 8080:8080 $DOCKER_IMAGE:latest
+      EOF
