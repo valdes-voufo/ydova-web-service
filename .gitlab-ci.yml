@@ -25,7 +25,7 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
     # SSH into EC2 and deploy Docker container
-    - ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP
+    - ssh -o "$SSH_PRIVATE_KEY"  ec2-user@3.84.219.44
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
     - docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry
     - docker stop ydova-web-service || true
