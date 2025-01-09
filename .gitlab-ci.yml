@@ -17,7 +17,7 @@ build:
       if [ ! -d "project-directory" ]; then
       git clone git@git.rwth-aachen.de:ydova/ydova-web-service.git ydova-web-service
       fi
-      cd project-directory
+      cd ydova-web-service
 
       # Pull the latest changes
       git checkout main
