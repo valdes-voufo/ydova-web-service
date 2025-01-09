@@ -10,7 +10,10 @@ variables:
 build:
   stage: build
   script:
-    - docker build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry .
+    - docker buildx build \
+      --platform linux/amd64,linux/arm64 \
+      -t registry.git.rwth-aachen.de/ydova/ydova-package-registry \
+      --push
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
     - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
   only:
