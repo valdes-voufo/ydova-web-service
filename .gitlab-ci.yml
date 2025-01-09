@@ -10,6 +10,12 @@ variables:
 build:
   stage: build
   script:
+    # Ensure SSH key is loaded into the agent
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
+
+    # SSH into EC2 and execute deployment commands
+    - ssh -o StrictHostKeyChecking=no -p 22 ec2-user@3.84.219.44 <<EOF
     - docker buildx create --use
     - docker buildx inspect --bootstrap
     - docker buildx build  --platform linux/amd64  -t registry.git.rwth-aachen.de/ydova/ydova-package-registry .
