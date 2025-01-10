@@ -21,7 +21,7 @@ build:
 deploy:
   stage: deploy
   script:
-    # Ensure SSH key is loaded into the agent
+    # Ensure an SSH key is loaded into the agent
   #  - eval $(ssh-agent -s)
   #  - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
 
