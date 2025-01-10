@@ -24,7 +24,6 @@ public class EmailController {
     public EmailController( GmailService gmailService) {
         this.gmailService = gmailService;
     }
-
     @PostMapping("/send-mail")
     public List<EmailSendingResponseDto> sendMail(@RequestPart("files") MultipartFile[] files,
                                                   @RequestPart("content") String otherData ) {
