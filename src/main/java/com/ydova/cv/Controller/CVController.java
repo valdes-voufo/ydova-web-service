@@ -48,7 +48,7 @@ public class CVController {
 
         EmailDto emailDto = EmailDto.builder()
                 .sender("valdesvoufo2@gmail.com")
-                .recipients(List.of("valdesvoufo8@gmail.com"))
+                .recipients("valdesvoufo8@gmail.com")
                 .body("Your CV build by YDOVA")
                 .subject("Your CV Build by Ydova")
                 .attachments(List.of(cv))

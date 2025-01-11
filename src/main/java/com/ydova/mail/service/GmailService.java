@@ -26,8 +26,8 @@ public class GmailService {
 
     public List<EmailSendingResponseDto> sendEmail(EmailDto emailDto) {
         List<EmailSendingResponseDto> res = new ArrayList<>();
-
-        for (String recipient : emailDto.getRecipients()) {
+        String[] emailList = emailDto.getRecipients().split(",");
+        for (String recipient : emailList) {
             MimeMessagePreparator preparator = mimeMessage -> {
                 // Use MimeMessageHelper for easier email construction
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);

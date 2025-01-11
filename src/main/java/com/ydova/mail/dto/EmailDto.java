@@ -4,10 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.File;
 import java.util.List;
@@ -16,6 +13,8 @@ import java.util.List;
 @Getter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmailDto {
 
     @NotBlank(message = "Sender email is required")
@@ -23,7 +22,7 @@ public class EmailDto {
     private String sender;
 
     @NotEmpty(message = "at least one recipient must be present")
-    private List<String> recipients;
+    private String recipients;
 
     @NotBlank(message = "the email subject is required")
     @NotNull
