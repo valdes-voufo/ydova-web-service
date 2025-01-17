@@ -12,11 +12,12 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
+import com.ydova.ahub.entity.AHubClient;
+import com.ydova.ahub.entity.LanguageLevel;
+import com.ydova.ahub.entity.TimeLineEntry;
 import com.ydova.cv.CVGenerationException;
 import com.ydova.cv.CVGenerationModule;
-import com.ydova.ahub.dto.AHubClientDto;
-import com.ydova.ahub.dto.LanguageLevel;
-import com.ydova.ahub.dto.TimeLineEntryDto;
+
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -37,7 +38,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
     private static final float GAP_BETWEEN_ENTRIES = 80;
 
     @Override
-    public File generate(AHubClientDto dto) throws CVGenerationException {
+    public File generate(AHubClient dto) throws CVGenerationException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 
@@ -71,7 +72,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
 
         if (dto.getLanguageLevels() != null) {
             for (int i = 0; i < dto.getLanguageLevels().size(); i++) {
-                LanguageLevel language = dto.getLanguageLevels().get(i);
+                LanguageLevel language = dto.getLanguageLevels().iterator().next();
                 addLanguageBar(canvas, document, language, 10 + CVGenerationModule.GAP_BETWEEN_LANGUAGES * i);
             }
         }
@@ -117,11 +118,12 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
     }
 
 
-    public void mkRightSection(PdfCanvas canvas, Document document, AHubClientDto dto) {
+    public void mkRightSection(PdfCanvas canvas, Document document, AHubClient dto) {
 
         // name + profession
         Cell nameCell = new Cell().setFixedPosition(RIGHT_TEXT_X_OFFSET, 770, UnitValue.createPercentValue(100));
-        Paragraph name = new Paragraph(dto.getFullName()).setFontSize(24).setBold();
+       String fullname = dto.getLastname() + " " + dto.getFirstname();
+        Paragraph name = new Paragraph(fullname).setFontSize(24).setBold();
         Paragraph profession = new Paragraph(dto.getStatus()).setFontSize(12);
 
 
@@ -137,7 +139,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
 
         // Add Experiences as timeline
         if (dto.getExperience() != null) {
-            addTimeLine(document, canvas, dto.getExperience(), TEXT_Y_OFFSET - 20);
+            addTimeLine(document, canvas, dto.getExperience().stream().map(e->(TimeLineEntry)e).toList(), TEXT_Y_OFFSET - 20);
         }
 
 
@@ -158,14 +160,15 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
 
         // Add Experiences as timeline
         if (dto.getEducation() != null) {
-            addTimeLine(document, canvas, dto.getEducation(), ya - GAP_BETWEEN_ENTRIES);
+
+            addTimeLine(document, canvas, dto.getEducation().stream().map(s->(TimeLineEntry)s).toList(), ya - GAP_BETWEEN_ENTRIES);
         }
 
 
     }
 
 
-    private void addTimeLine(Document document, PdfCanvas canvas, List<TimeLineEntryDto> timeLineEntries, float y) {
+    private void addTimeLine(Document document, PdfCanvas canvas, List<TimeLineEntry> timeLineEntries, float y) {
         if (timeLineEntries == null || timeLineEntries.isEmpty()) {
             return;
         }
@@ -182,11 +185,12 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
 
         for (int i = 0; i < timeLineEntries.size(); i++) {
             // Left column: Date and Institution
-            TimeLineEntryDto entry = timeLineEntries.get(i);
+            TimeLineEntry entry = timeLineEntries.get(i);
             Cell leftCell = new Cell().setFontSize(8).setFixedPosition(RIGHT_TEXT_X_OFFSET, y - GAP_BETWEEN_ENTRIES * i, 80);
 
             leftCell.add(new Paragraph(entry.getInstitution()).setFontSize(10));
-            leftCell.add(new Paragraph(entry.getPeriod()));
+            String period = "" ; //todo fixme
+            leftCell.add(new Paragraph(period));
             leftCell.add(new Paragraph(entry.getPlace()));
 
             document.add(leftCell);
@@ -194,7 +198,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
 
             Cell rightCell = new Cell().setFixedPosition(RIGHT_TEXT_X_OFFSET + 30 + 100, y - GAP_BETWEEN_ENTRIES * i - 14, 50);
             rightCell.add(new Paragraph(entry.getTask()).setFontSize(12));
-            entry.getTaskDescription().forEach(item -> rightCell.add(new Paragraph(item).setPaddingLeft(10).setFontSize(8)));
+            entry.getDescription().forEach(item -> rightCell.add(new Paragraph(item).setPaddingLeft(10).setFontSize(8)));
 
             document.add(rightCell);
 
@@ -204,7 +208,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
     }
 
 
-    public Cell mkLeftSection(PdfCanvas canvas, Document document, AHubClientDto dto) throws CVGenerationException {
+    public Cell mkLeftSection(PdfCanvas canvas, Document document, AHubClient dto) throws CVGenerationException {
 
         Cell leftSection = new Cell();
 
@@ -226,7 +230,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
 
         //adding address
         Cell addressLabel = new Cell().setBorder(Border.NO_BORDER);
-        addressLabel.add(new Paragraph(dto.geStreetAndCity()));
+        addressLabel.add(new Paragraph("Street and City")); //todo fixme
         addressLabel.add(new Paragraph(dto.getCountry()));
         IBlockElement address = mkInfoWithIcon(CVGenerationModule.HOME_ICON, addressLabel);
         leftCenter.add(address);

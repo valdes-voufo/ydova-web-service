@@ -1,8 +1,6 @@
 package com.ydova.ahub.service;
 
-import com.ydova.ahub.converter.SchoolConverter;
-import com.ydova.ahub.dto.SchoolDto;
-import com.ydova.ahub.dto.SchoolDto;
+
 import com.ydova.ahub.entity.School;
 import com.ydova.ahub.repositoty.SchoolRepository;
 import com.ydova.mail.YdovaGenericException;
@@ -22,11 +20,11 @@ public class SchoolService {
     }
 
     // Add a new school
-    public SchoolDto create(SchoolDto dto) {
+    public School create(School dto) {
         if (!repository.findSchoolByEmail(dto.getEmail()).isEmpty()) {
             throw new YdovaGenericException(String.format("Email %s already exists", dto.getEmail()));
         }
-        return SchoolConverter.toDto(repository.save(SchoolConverter.toEntity(dto)));  // Save and return the saved school
+        return repository.save(dto);  // Save and return the saved school
     }
 
     // Remove a school by ID
@@ -41,23 +39,23 @@ public class SchoolService {
     }
 
     // Update an existing school
-    public SchoolDto update(Long id, SchoolDto updatedClient) {
+    public School update(Long id, School updatedClient) {
         Optional<School> existingClient = repository.findById(id);
         if (existingClient.isPresent()) {
             updatedClient.setId(id);  // Ensure the ID is set for update
-            return SchoolConverter.toDto(repository.save(SchoolConverter.toEntity(updatedClient)));  // Save and return the updated school
+            return repository.save(updatedClient);  // Save and return the updated school
         } else {
             throw new RuntimeException("Client with ID " + id + " not found.");
         }
     }
 
     // Get a school by ID
-    public SchoolDto read(Long id) {
-        return SchoolConverter.toDto(repository.findById(id).orElseThrow(() -> new RuntimeException("Client not found.")));
+    public School read(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Client not found."));
     }
 
     // Get a list of all schools
-    public List<SchoolDto> readAll() {
-        return SchoolConverter.toDtoList(repository.findAll());  // Return all schools in the repository
+    public List<School> readAll() {
+        return repository.findAll();
     }
 }

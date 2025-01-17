@@ -1,6 +1,7 @@
 package com.ydova.ahub.controller;
 
-import com.ydova.ahub.dto.SchoolDto;
+
+import com.ydova.ahub.entity.School;
 import com.ydova.ahub.service.SchoolService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,17 @@ public class SchoolController {
     }
 
     @PostMapping("/school")
-    public SchoolDto add(@RequestBody @Valid SchoolDto school) {
+    public School add(@RequestBody @Valid School school) {
        return schoolService.create(school);
     }
 
     @GetMapping("/school")
-    public List<SchoolDto> readAll() {
+    public List<School> readAll() {
         return schoolService.readAll();
     }
 
     @PostMapping("/school-many")
-    public String addSchoolList(@RequestBody @Valid  List<SchoolDto> schoolDtoList) {
+    public String addSchoolList(@RequestBody @Valid  List<School> schoolDtoList) {
         schoolDtoList.forEach(schoolService::create);
         return "School Successfully created";
     }

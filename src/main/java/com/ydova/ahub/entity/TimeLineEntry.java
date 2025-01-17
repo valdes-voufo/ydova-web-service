@@ -1,41 +1,41 @@
 package com.ydova.ahub.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "ah_timeline_entry")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@DiscriminatorColumn(name = "note_type", discriminatorType = DiscriminatorType.STRING)
 public class TimeLineEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String institution;
-    private String startMonth;
-    private String endMonth;
-    private String startYear;
-    private String endYear;
-    private String place;
-    private String task;
+    @GeneratedValue
+    protected Long id;
 
     @ElementCollection
     @CollectionTable(name = "timeline_task_descriptions", joinColumns = @JoinColumn(name = "timeline_entry_id"))
     @Column(name = "description")
-    private Set<String> taskDescription = new HashSet<>();
+    protected Set<String> taskDescription = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private AHubClient client;
+    protected AHubClient client;
+
+    protected String institution;
+    protected String startMonth;
+    protected String endMonth;
+    protected String startYear;
+    protected String endYear;
+    protected String place;
+    protected String task;
+
+    public Set<String> getDescription(){
+        return  new HashSet<>();
+    }
+
+
 }

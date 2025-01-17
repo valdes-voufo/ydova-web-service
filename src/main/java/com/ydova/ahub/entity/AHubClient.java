@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Table(name = "ah_client")
 @Entity
@@ -30,18 +31,20 @@ public class AHubClient {
     private String status;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TimeLineEntry> experience = new ArrayList<>();
+    private List<Experience> experience = new ArrayList<>();
+
+
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TimeLineEntry> highSchool = new ArrayList<>();
-
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TimeLineEntry> primarySchool = new ArrayList<>();
+    private List<Education> education = new ArrayList<>();
 
 
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Application> applications= new ArrayList<>();
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<LanguageLevel> languageLevels;
 
 
 }

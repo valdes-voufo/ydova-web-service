@@ -1,9 +1,14 @@
 package com.ydova.ahub.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@DiscriminatorValue("EDUCATION")
-public class Education extends TimeLineEntry {
+@Table(name = "education")
+public class Education  extends TimeLineEntry{
+
 }

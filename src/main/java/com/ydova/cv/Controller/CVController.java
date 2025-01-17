@@ -1,9 +1,9 @@
 package com.ydova.cv.Controller;
 
 import com.ydova.Log;
+import com.ydova.ahub.entity.AHubClient;
 import com.ydova.cv.CVGenerationException;
 import com.ydova.cv.service.util.DefaultCVGenerator;
-import com.ydova.ahub.dto.AHubClientDto;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.service.GmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +29,16 @@ public class CVController {
 
 
     @PostMapping("/cv")
-    public void buildCV(@RequestBody AHubClientDto AHubClientDto) {
+    public void buildCV(@RequestBody AHubClient client) {
         DefaultCVGenerator defaultCvGenerator = new DefaultCVGenerator() ;
-        AHubClientDto.setStatus("Student");  //todo fixme
+        client.setStatus("Student");  //todo fixme
 
 
-        Log.info("Building CV:"+ AHubClientDto,this.getClass());
+        Log.info("Building CV:"+ client,this.getClass());
 
         File cv;
         try {
-            cv = defaultCvGenerator.generate(AHubClientDto);
+            cv = defaultCvGenerator.generate(client);
         } catch (CVGenerationException e) {
             throw new RuntimeException(e);
         }

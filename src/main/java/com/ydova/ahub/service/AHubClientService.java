@@ -1,7 +1,6 @@
 package com.ydova.ahub.service;
 
-import com.ydova.ahub.converter.AHubClientConverter;
-import com.ydova.ahub.dto.AHubClientDto;
+
 import com.ydova.ahub.entity.AHubClient;
 import com.ydova.ahub.repositoty.AHubClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +19,10 @@ public class AHubClientService {
     }
 
     // Add a new client
-    public AHubClientDto create(AHubClientDto dto) {
+    public AHubClient create(AHubClient dto) {
+        dto.setStatus("Student");
+        return repository.save( dto);
 
-      //  dto.setStatus("Student");  // Default status
-       // return AHubClientConverter.toDto(repository.save( AHubClientConverter.toEntity(dto)));  // Save and return the saved client
-
-        repository.deleteAll();
-        return  null;
     }
 
     // Remove a client by ID
@@ -41,23 +37,23 @@ public class AHubClientService {
     }
 
     // Update an existing client
-    public AHubClientDto update(Long id, AHubClientDto updatedClient) {
+    public AHubClient update(Long id, AHubClient updatedClient) {
         Optional<AHubClient> existingClient = repository.findById(id);
         if (existingClient.isPresent()) {
             updatedClient.setId(id);  // Ensure the ID is set for update
-            return AHubClientConverter.toDto(repository.save( AHubClientConverter.toEntity(updatedClient)));  // Save and return the updated client
+            return repository.save( updatedClient);  // Save and return the updated client
         } else {
             throw new RuntimeException("Client with ID " + id + " not found.");
         }
     }
 
     // Get a client by ID
-    public AHubClientDto read(Long id) {
-        return  AHubClientConverter.toDto(repository.findById(id).orElseThrow(() -> new RuntimeException("Client not found.")));
+    public AHubClient read(Long id) {
+        return  repository.findById(id).orElseThrow(() -> new RuntimeException("Client not found."));
     }
 
     // Get a list of all clients
-    public List<AHubClientDto> readAll() {
-        return AHubClientConverter.toDtoList(repository.findAll());  // Return all clients in the repository
+    public List<AHubClient> readAll() {
+        return repository.findAll();  // Return all clients in the repository
     }
 }
