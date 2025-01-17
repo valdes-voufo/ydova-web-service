@@ -23,8 +23,5 @@ public class Application {
 
     private String  school;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private AHubClient client;
 
 }

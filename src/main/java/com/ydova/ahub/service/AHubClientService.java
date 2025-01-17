@@ -1,6 +1,7 @@
 package com.ydova.ahub.service;
 
 
+import com.ydova.Log;
 import com.ydova.ahub.entity.AHubClient;
 import com.ydova.ahub.repositoty.AHubClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class AHubClientService {
     // Add a new client
     public AHubClient create(AHubClient dto) {
         dto.setStatus("Student");
+        Log.info(dto.toString(),this.getClass());
         return repository.save( dto);
 
     }

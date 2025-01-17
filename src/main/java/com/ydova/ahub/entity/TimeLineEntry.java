@@ -1,8 +1,11 @@
 package com.ydova.ahub.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +13,7 @@ import java.util.Set;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
+@ToString
 public class TimeLineEntry {
 
     @Id
@@ -20,10 +24,6 @@ public class TimeLineEntry {
     @CollectionTable(name = "timeline_task_descriptions", joinColumns = @JoinColumn(name = "timeline_entry_id"))
     @Column(name = "description")
     protected Set<String> taskDescription = new HashSet<>();
-
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    protected AHubClient client;
 
     protected String institution;
     protected String startMonth;

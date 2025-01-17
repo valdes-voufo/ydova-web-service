@@ -16,13 +16,10 @@ public class LanguageLevel {
     private String language;
     private float level;
     private String description;
+
     @Id @GeneratedValue
     private Long id;
 
-
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private AHubClient client;
 
 
 }
