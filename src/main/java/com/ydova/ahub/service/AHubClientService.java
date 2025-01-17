@@ -20,14 +20,17 @@ public class AHubClientService {
     }
 
     // Add a new client
-    public AHubClientDto addClient(AHubClientDto dto) {
+    public AHubClientDto create(AHubClientDto dto) {
 
-        dto.setStatus("Student");  // Default status
-        return AHubClientConverter.toDto(repository.save( AHubClientConverter.toEntity(dto)));  // Save and return the saved client
+      //  dto.setStatus("Student");  // Default status
+       // return AHubClientConverter.toDto(repository.save( AHubClientConverter.toEntity(dto)));  // Save and return the saved client
+
+        repository.deleteAll();
+        return  null;
     }
 
     // Remove a client by ID
-    public String removeClient(Long id) {
+    public String remove(Long id) {
         Optional<AHubClient> client = repository.findById(id);
         if (client.isPresent()) {
             repository.delete(client.get());  // Delete the client
@@ -38,7 +41,7 @@ public class AHubClientService {
     }
 
     // Update an existing client
-    public AHubClientDto updateClient(Long id, AHubClientDto updatedClient) {
+    public AHubClientDto update(Long id, AHubClientDto updatedClient) {
         Optional<AHubClient> existingClient = repository.findById(id);
         if (existingClient.isPresent()) {
             updatedClient.setId(id);  // Ensure the ID is set for update
@@ -49,12 +52,12 @@ public class AHubClientService {
     }
 
     // Get a client by ID
-    public AHubClientDto getClient(Long id) {
+    public AHubClientDto read(Long id) {
         return  AHubClientConverter.toDto(repository.findById(id).orElseThrow(() -> new RuntimeException("Client not found.")));
     }
 
     // Get a list of all clients
-    public List<AHubClientDto> getClients() {
+    public List<AHubClientDto> readAll() {
         return AHubClientConverter.toDtoList(repository.findAll());  // Return all clients in the repository
     }
 }

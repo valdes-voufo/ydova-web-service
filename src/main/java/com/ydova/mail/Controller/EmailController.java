@@ -3,7 +3,7 @@ package com.ydova.mail.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ydova.Log;
-import com.ydova.mail.YdovaMailSendingException;
+import com.ydova.mail.YdovaGenericException;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.dto.EmailSendingResponseDto;
 import com.ydova.mail.service.GmailService;
@@ -42,7 +42,7 @@ public class EmailController {
         try {
              email = objectMapper.readValue(otherData, EmailDto.class);
         } catch (JsonProcessingException e) {
-            throw new YdovaMailSendingException(e.getMessage());
+            throw new YdovaGenericException(e.getMessage());
         }
 
 
@@ -58,7 +58,7 @@ public class EmailController {
                 errorMessage.append(" ").append(violation.getPropertyPath())
                         .append(": ").append(violation.getMessage()).append(";");
             }
-            throw new YdovaMailSendingException(errorMessage.toString());
+            throw new YdovaGenericException(errorMessage.toString());
         }
 
 

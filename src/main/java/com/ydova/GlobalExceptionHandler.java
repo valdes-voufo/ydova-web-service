@@ -1,7 +1,7 @@
 package com.ydova;
 
 
-import com.ydova.mail.YdovaMailSendingException;
+import com.ydova.mail.YdovaGenericException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -25,8 +25,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(YdovaMailSendingException.class)
-    public ResponseEntity<String> handleValidationExceptions(YdovaMailSendingException ex) {
+    @ExceptionHandler(YdovaGenericException.class)
+    public ResponseEntity<String> handleValidationExceptions(YdovaGenericException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

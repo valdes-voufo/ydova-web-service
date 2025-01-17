@@ -1,11 +1,12 @@
 package com.ydova.ahub.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "ah_client")
 @Entity
@@ -27,5 +28,20 @@ public class AHubClient {
     private String civilState;
     private String nationality;
     private String status;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TimeLineEntry> experience = new ArrayList<>();
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TimeLineEntry> highSchool = new ArrayList<>();
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TimeLineEntry> primarySchool = new ArrayList<>();
+
+
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Application> applications= new ArrayList<>();
+
 
 }

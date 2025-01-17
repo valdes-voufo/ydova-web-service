@@ -55,6 +55,7 @@ public class AHubClientConverter {
         client.setCivilState(dto.getCivilState());
         client.setNationality(dto.getNationality());
         client.setStatus(dto.getStatus());
+        client.setExperience(TimeLineEntryConverter.toEntityList(dto.getExperience(),client));
 
         return client;
     }
