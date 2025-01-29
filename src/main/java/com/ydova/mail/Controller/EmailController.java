@@ -3,7 +3,7 @@ package com.ydova.mail.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ydova.Log;
-import com.ydova.mail.YdovaGenericException;
+import com.ydova.cv.YdovaException;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.dto.EmailSendingResponseDto;
 import com.ydova.mail.service.GmailService;
@@ -33,7 +33,7 @@ public class EmailController {
     @PostMapping("/send-mail")
     public List<EmailSendingResponseDto> sendMail(
             @RequestPart(value = "files", required = false) MultipartFile[] files,
-            @RequestPart("content") String otherData) {
+            @RequestPart("content") String otherData) throws YdovaException {
 
 
 
@@ -42,7 +42,7 @@ public class EmailController {
         try {
              email = objectMapper.readValue(otherData, EmailDto.class);
         } catch (JsonProcessingException e) {
-            throw new YdovaGenericException(e.getMessage());
+            throw new YdovaException(e.getMessage());
         }
 
 
@@ -58,7 +58,7 @@ public class EmailController {
                 errorMessage.append(" ").append(violation.getPropertyPath())
                         .append(": ").append(violation.getMessage()).append(";");
             }
-            throw new YdovaGenericException(errorMessage.toString());
+            throw new YdovaException(errorMessage.toString());
         }
 
 

@@ -3,7 +3,8 @@ package com.ydova.ahub.service;
 
 import com.ydova.ahub.entity.School;
 import com.ydova.ahub.repositoty.SchoolRepository;
-import com.ydova.mail.YdovaGenericException;
+
+import com.ydova.cv.YdovaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,9 @@ public class SchoolService {
     }
 
     // Add a new school
-    public School create(School dto) {
+    public School create(School dto) throws YdovaException {
         if (!repository.findSchoolByEmail(dto.getEmail()).isEmpty()) {
-            throw new YdovaGenericException(String.format("Email %s already exists", dto.getEmail()));
+            throw new YdovaException(String.format("Email %s already exists", dto.getEmail()));
         }
         return repository.save(dto);  // Save and return the saved school
     }

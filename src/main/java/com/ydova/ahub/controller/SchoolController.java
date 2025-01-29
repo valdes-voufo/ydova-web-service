@@ -3,7 +3,9 @@ package com.ydova.ahub.controller;
 
 import com.ydova.ahub.entity.School;
 import com.ydova.ahub.service.SchoolService;
+import com.ydova.cv.YdovaException;
 import jakarta.validation.Valid;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ public class SchoolController {
     }
 
     @PostMapping("/school")
-    public School add(@RequestBody @Valid School school) {
+    public School add(@RequestBody @Valid School school) throws YdovaException {
        return schoolService.create(school);
     }
 
@@ -29,9 +31,13 @@ public class SchoolController {
         return schoolService.readAll();
     }
 
+
+
     @PostMapping("/school-many")
-    public String addSchoolList(@RequestBody @Valid  List<School> schoolDtoList) {
-        schoolDtoList.forEach(schoolService::create);
+    public String addSchoolList(@RequestBody @Valid  List<School> schoolDtoList)  throws YdovaException {
+
+
+        //todo implemnt
         return "School Successfully created";
     }
 

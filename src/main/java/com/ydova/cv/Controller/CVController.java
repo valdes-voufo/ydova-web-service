@@ -2,7 +2,7 @@ package com.ydova.cv.Controller;
 
 import com.ydova.Log;
 import com.ydova.ahub.entity.AHubClient;
-import com.ydova.cv.CVGenerationException;
+import com.ydova.cv.YdovaException;
 import com.ydova.cv.service.util.DefaultCVGenerator;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.service.GmailService;
@@ -39,7 +39,7 @@ public class CVController {
         File cv;
         try {
             cv = defaultCvGenerator.generate(client);
-        } catch (CVGenerationException e) {
+        } catch (YdovaException e) {
             throw new RuntimeException(e);
         }
 

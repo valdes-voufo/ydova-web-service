@@ -15,7 +15,7 @@ import com.itextpdf.layout.properties.VerticalAlignment;
 import com.ydova.ahub.entity.AHubClient;
 import com.ydova.ahub.entity.LanguageLevel;
 import com.ydova.ahub.entity.TimeLineEntry;
-import com.ydova.cv.CVGenerationException;
+import com.ydova.cv.YdovaException;
 import com.ydova.cv.CVGenerationModule;
 
 
@@ -38,7 +38,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
     private static final float GAP_BETWEEN_ENTRIES = 80;
 
     @Override
-    public File generate(AHubClient dto) throws CVGenerationException {
+    public File generate(AHubClient dto) throws YdovaException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 
@@ -208,7 +208,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
     }
 
 
-    public Cell mkLeftSection(PdfCanvas canvas, Document document, AHubClient dto) throws CVGenerationException {
+    public Cell mkLeftSection(PdfCanvas canvas, Document document, AHubClient dto) throws YdovaException {
 
         Cell leftSection = new Cell();
 
@@ -304,7 +304,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
     }
 
 
-    public IBlockElement mkInfoWithIcon(String icon, Cell info) throws CVGenerationException {
+    public IBlockElement mkInfoWithIcon(String icon, Cell info) throws YdovaException {
         Table table = new Table(new float[]{1, 4});
         table.setBorder(Border.NO_BORDER);
 
@@ -329,7 +329,7 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
     }
 
 
-    public Cell loadIcon(String path) throws CVGenerationException {
+    public Cell loadIcon(String path) throws YdovaException {
         Cell cell = new Cell();
         cell.setBorder(Border.NO_BORDER);
 
@@ -343,12 +343,12 @@ public class DefaultCVGenerator implements CVGenerationStrategy {
         return cell;
     }
 
-    public Image loadImage(String path) throws CVGenerationException {
+    public Image loadImage(String path) throws YdovaException {
         Image img;
         try {
             img = new Image(ImageDataFactory.create(path));
         } catch (MalformedURLException e) {
-            throw new CVGenerationException("Error While creating icon:" + e.getMessage());
+            throw new YdovaException("Error While creating icon:" + e.getMessage());
         }
 
         return img;

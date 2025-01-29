@@ -1,7 +1,7 @@
 package com.ydova.cv.service;
 
 import com.ydova.ahub.entity.AHubClient;
-import com.ydova.cv.CVGenerationException;
+import com.ydova.cv.YdovaException;
 import com.ydova.ahub.repositoty.AHubClientRepository;
 import com.ydova.cv.service.util.DefaultCVGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class CVService {
         this.cvRepository = cvRepository;
     }
 
-    public File generateCV(AHubClient dto) throws CVGenerationException {
+    public File generateCV(AHubClient dto) throws YdovaException {
         DefaultCVGenerator generator = new DefaultCVGenerator();
         return generator.generate(dto);
     }
