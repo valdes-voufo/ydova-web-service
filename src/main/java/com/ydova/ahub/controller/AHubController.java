@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin("*")
-@RequestMapping("/client")
-@RestController
+
 public class AHubController {
     private final AHubClientService service;
 
-    @Autowired
+
     public AHubController(AHubClientService service) {
         this.service = service;
     }
