@@ -7,6 +7,10 @@ import com.ydova.cv.YdovaException;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.dto.EmailSendingResponseDto;
 import com.ydova.mail.service.GmailService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -18,9 +22,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-
 @CrossOrigin(origins = "*") // Allows all origins
 @RestController
+@Tag(name = "Email Sending Controller", description = "APIs for sending emails with optional attachments")
 public class EmailSendingController {
     private final GmailService gmailService;
 
@@ -29,24 +33,24 @@ public class EmailSendingController {
         this.gmailService = gmailService;
     }
 
-
+    @Operation(summary = "Send an email", description = "Sends an email with optional attachments")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Email sent successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid email data"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping("/send-mail")
     public List<EmailSendingResponseDto> sendMail(
             @RequestPart(value = "files", required = false) MultipartFile[] files,
             @RequestPart("content") String otherData) throws YdovaException {
 
-
-
         ObjectMapper objectMapper = new ObjectMapper();
         EmailDto email;
         try {
-             email = objectMapper.readValue(otherData, EmailDto.class);
+            email = objectMapper.readValue(otherData, EmailDto.class);
         } catch (JsonProcessingException e) {
             throw new YdovaException(e.getMessage());
         }
-
-
-
 
         // Validate the EmailDto object
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -61,37 +65,34 @@ public class EmailSendingController {
             throw new YdovaException(errorMessage.toString());
         }
 
+        if (files != null) {
+            List<File> convertedFiles = Arrays.stream(files)
+                    .map(this::convertMultipartFileToFile)
+                    .toList();
+            email.setAttachments(new ArrayList<>(convertedFiles));
+        }
 
-   if (files  != null){
-       List<File>   convertedFiles = Arrays.stream(files).map(this::convertMultipartFileToFile).toList();
-       email.setAttachments(new ArrayList<>(convertedFiles));
-   }
+        Log.info("Sending mail: " + email, this.getClass());
 
-
-        Log.info("sending mail:"+email,this.getClass());
-
-     return gmailService.sendEmail(email);
-      //  return Collections.singletonList(new EmailSendingResponseDto(email.getRecipients(), true));
+        return gmailService.sendEmail(email);
     }
 
-
-
-
+    @Operation(summary = "Test API", description = "Returns a welcome message")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "API is running")
+    })
     @GetMapping("/")
     public String get() {
-        return "Welcome to YDOVA WEB SEVER 1";
+        return "Welcome to YDOVA WEB SERVER 1";
     }
 
-    private File convertMultipartFileToFile(MultipartFile multipartFile)  {
-
+    private File convertMultipartFileToFile(MultipartFile multipartFile) {
         File file = new File(System.getProperty("java.io.tmpdir") + File.separator + multipartFile.getOriginalFilename());
         try {
             multipartFile.transferTo(file);
         } catch (IOException e) {
-            Log.error("Error While converting the Multipart file to a file");
+            Log.error("Error while converting the MultipartFile to a File");
         }
         return file;
     }
-
-
 }
