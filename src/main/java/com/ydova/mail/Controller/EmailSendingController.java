@@ -21,11 +21,11 @@ import java.util.*;
 
 @CrossOrigin(origins = "*") // Allows all origins
 @RestController
-public class EmailController {
+public class EmailSendingController {
     private final GmailService gmailService;
 
     @Autowired
-    public EmailController( GmailService gmailService) {
+    public EmailSendingController(GmailService gmailService) {
         this.gmailService = gmailService;
     }
 
