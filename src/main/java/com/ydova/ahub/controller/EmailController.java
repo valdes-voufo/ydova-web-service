@@ -1,6 +1,6 @@
 package com.ydova.ahub.controller;
 
-import com.ydova.ahub.entity.EMAIL;
+import com.ydova.ahub.entity.Email;
 import com.ydova.ahub.service.EmailService;
 import com.ydova.cv.YdovaException;
 import jakarta.validation.Valid;
@@ -33,7 +33,7 @@ public class EmailController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/emails")
-    public EMAIL add(@RequestBody @Valid EMAIL email) throws YdovaException {
+    public Email add(@RequestBody @Valid Email email) throws YdovaException {
         return emailService.create(email);
     }
 
@@ -42,7 +42,7 @@ public class EmailController {
             @ApiResponse(responseCode = "200", description = "List of emails retrieved successfully")
     })
     @GetMapping("/emails")
-    public List<EMAIL> readAll() {
+    public List<Email> readAll() {
         return emailService.readAll();
     }
 
@@ -53,7 +53,7 @@ public class EmailController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/emails-list")
-    public String addSchoolList(@RequestBody @Valid List<EMAIL> email) throws YdovaException {
+    public String addSchoolList(@RequestBody @Valid List<Email> email) throws YdovaException {
         emailService.createAll(email);
         return "School Successfully created";
     }

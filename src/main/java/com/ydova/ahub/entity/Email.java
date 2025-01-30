@@ -10,7 +10,7 @@ import lombok.Data;
 @Table(name = "school_or_company")
 @Entity
 @Data
-public class EMAIL {
+public class Email {
 
     @Id @GeneratedValue
     private Long id;

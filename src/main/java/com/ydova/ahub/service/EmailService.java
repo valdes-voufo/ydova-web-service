@@ -1,11 +1,10 @@
 package com.ydova.ahub.service;
 
 
-import com.ydova.ahub.entity.EMAIL;
+import com.ydova.ahub.entity.Email;
 import com.ydova.ahub.repositoty.SchoolRepository;
 
 import com.ydova.cv.YdovaException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class EmailService {
     }
 
     // Add a new school
-    public EMAIL create(EMAIL dto) throws YdovaException {
+    public Email create(Email dto) throws YdovaException {
         if (!repository.findSchoolByEmail(dto.getEmail()).isEmpty()) {
             throw new YdovaException(String.format("Email %s already exists", dto.getEmail()));
         }
@@ -31,14 +30,14 @@ public class EmailService {
 
     // Remove a school by ID
     public void remove(Long id) {
-        Optional<EMAIL> school = repository.findById(id);
+        Optional<Email> school = repository.findById(id);
         // Delete the school
         school.ifPresent(repository::delete);
     }
 
     // Update an existing school
-    public EMAIL update(Long id, EMAIL updatedClient) {
-        Optional<EMAIL> existingClient = repository.findById(id);
+    public Email update(Long id, Email updatedClient) {
+        Optional<Email> existingClient = repository.findById(id);
         if (existingClient.isPresent()) {
             updatedClient.setId(id);  // Ensure the ID is set for update
             return repository.save(updatedClient);  // Save and return the updated school
@@ -48,18 +47,18 @@ public class EmailService {
     }
 
     // Get a school by ID
-    public EMAIL read(Long id) {
+    public Email read(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Client not found."));
     }
 
     // Get a list of all schools
-    public List<EMAIL> readAll() {
+    public List<Email> readAll() {
         return repository.findAll();
     }
 
-    public void createAll( List<EMAIL> email) {
+    public void createAll( List<Email> email) {
 
-        for (EMAIL e : email) {
+        for (Email e : email) {
             if (repository.findSchoolByEmail(e.getEmail()).isEmpty()) {
                 repository.save(e);
             }
