@@ -10,11 +10,12 @@ import lombok.Data;
 @Table(name = "school_or_company")
 @Entity
 @Data
-public class School {
+public class EMAIL {
 
     @Id @GeneratedValue
     private Long id;
     private String email;
-    private String  place;
+    private String  category;
+    private String place;
 
 }
