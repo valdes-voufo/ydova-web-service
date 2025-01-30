@@ -16,12 +16,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@RestController
+
 public class CVController {
 
     private  final GmailService gmailService ;
 
-    @Autowired
+
     public CVController(GmailService gmailService) {
         this.gmailService = gmailService;
     }
