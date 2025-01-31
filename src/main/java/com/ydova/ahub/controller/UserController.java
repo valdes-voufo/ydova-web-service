@@ -1,5 +1,6 @@
 package com.ydova.ahub.controller;
 
+import com.ydova.ahub.LoginDto;
 import com.ydova.ahub.entity.AppUser;
 import com.ydova.ahub.service.UserService;
 import com.ydova.cv.YdovaException;
@@ -22,8 +23,8 @@ public class UserController {
 
     @PostMapping("/login")
     @Operation(summary = "User Login", description = "Authenticates a user and returns user details.")
-    public AppUser login(@RequestBody AppUser appUser) throws YdovaException {
-        return userService.authenticate(appUser);
+    public AppUser login(@RequestBody LoginDto dto) throws YdovaException {
+        return userService.authenticate(dto);
     }
 
     @PostMapping("/sign-up")

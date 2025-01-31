@@ -1,5 +1,6 @@
 package com.ydova.ahub.service;
 
+import com.ydova.ahub.LoginDto;
 import com.ydova.ahub.entity.AppUser;
 import com.ydova.ahub.repositoty.AppUserRepository;
 import com.ydova.cv.YdovaException;
@@ -25,6 +26,10 @@ public class UserService {
 
     public AppUser create(AppUser user) throws YdovaException {
 
+        if (user.getKey() == null) {
+            throw new YdovaException("Invalid Permission Key");
+        }
+
         if (keys.contains(user.getKey())) {
             List<AppUser> users = userRepository.findByKey(user.getKey());
 
@@ -47,7 +52,7 @@ public class UserService {
     }
 
 
-    public AppUser authenticate(AppUser user) throws YdovaException {
+    public AppUser authenticate(LoginDto user) throws YdovaException {
 
         List<AppUser> userList = userRepository.findByEmail(user.getEmail());
 
