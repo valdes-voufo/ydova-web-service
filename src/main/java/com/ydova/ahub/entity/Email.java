@@ -4,7 +4,7 @@ package com.ydova.ahub.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "email")
+@Table(name = "email_table")
 @Entity
 @Data
 public class Email {
