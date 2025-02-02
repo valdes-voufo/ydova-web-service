@@ -1,5 +1,6 @@
 package com.ydova.ahub.controller;
 
+import com.ydova.ahub.dto.EmailGroupDto;
 import com.ydova.ahub.entity.EmailGroup;
 import com.ydova.ahub.service.EmailGroupService;
 import com.ydova.cv.YdovaException;
@@ -32,7 +33,7 @@ public class EmailGroupController {
             @ApiResponse(responseCode = "400", description = "Invalid request data")
     })
     @PostMapping
-    public EmailGroup create(@RequestBody EmailGroup emailGroup) {
+    public EmailGroup create(@RequestBody EmailGroupDto emailGroup) {
         return emailGroupService.create(emailGroup);
     }
 
@@ -41,7 +42,7 @@ public class EmailGroupController {
             @ApiResponse(responseCode = "200", description = "Email groups retrieved successfully")
     })
     @GetMapping
-    public List<EmailGroup> getAll() {
+    public List<EmailGroupDto> getAll() {
         return emailGroupService.getAll();
     }
 
@@ -51,7 +52,7 @@ public class EmailGroupController {
             @ApiResponse(responseCode = "404", description = "Email group not found")
     })
     @GetMapping("/{id}")
-    public Optional<EmailGroup> getById(@PathVariable Long id) {
+    public Optional<EmailGroupDto> getById(@PathVariable Long id) {
         return emailGroupService.getById(id);
     }
 
@@ -61,7 +62,7 @@ public class EmailGroupController {
             @ApiResponse(responseCode = "404", description = "Email group not found")
     })
     @PutMapping("/{id}")
-    public EmailGroup update(@PathVariable Long id, @RequestBody EmailGroup emailGroup) throws YdovaException {
+    public EmailGroupDto update(@PathVariable Long id, @RequestBody EmailGroupDto emailGroup) throws YdovaException {
         return emailGroupService.update(id, emailGroup);
     }
 

@@ -3,7 +3,7 @@ package com.ydova.ahub.service;
 
 import com.ydova.Log;
 import com.ydova.ahub.entity.AHubClient;
-import com.ydova.ahub.repositoty.AHubClientRepository;
+import com.ydova.ahub.repository.AHubClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

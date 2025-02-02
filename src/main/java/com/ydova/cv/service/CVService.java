@@ -2,7 +2,7 @@ package com.ydova.cv.service;
 
 import com.ydova.ahub.entity.AHubClient;
 import com.ydova.cv.YdovaException;
-import com.ydova.ahub.repositoty.AHubClientRepository;
+import com.ydova.ahub.repository.AHubClientRepository;
 import com.ydova.cv.service.util.DefaultCVGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

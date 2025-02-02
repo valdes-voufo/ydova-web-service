@@ -2,7 +2,7 @@ package com.ydova.ahub.service;
 
 
 import com.ydova.ahub.entity.Email;
-import com.ydova.ahub.repositoty.SchoolRepository;
+import com.ydova.ahub.repository.EmailRepository;
 
 import com.ydova.cv.YdovaException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +13,16 @@ import java.util.Optional;
 
 @Service
 public class EmailService {
-    private final SchoolRepository repository;
+    private final EmailRepository repository;
 
     @Autowired
-    public EmailService(SchoolRepository repository) {
+    public EmailService(EmailRepository repository) {
         this.repository = repository;
     }
 
     // Add a new school
     public Email create(Email dto) throws YdovaException {
-        if (!repository.findSchoolByEmail(dto.getEmail()).isEmpty()) {
+        if (!repository.findByEmail(dto.getEmail()).isEmpty()) {
             throw new YdovaException(String.format("Email %s already exists", dto.getEmail()));
         }
         return repository.save(dto);  // Save and return the saved school
@@ -59,7 +59,7 @@ public class EmailService {
     public void createAll( List<Email> email) {
 
         for (Email e : email) {
-            if (repository.findSchoolByEmail(e.getEmail()).isEmpty()) {
+            if (repository.findByEmail(e.getEmail()).isEmpty()) {
                 repository.save(e);
             }
         }

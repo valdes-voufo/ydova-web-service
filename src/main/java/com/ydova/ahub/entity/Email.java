@@ -1,13 +1,10 @@
 package com.ydova.ahub.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "school_or_company")
+@Table(name = "email")
 @Entity
 @Data
 public class Email {
@@ -17,5 +14,6 @@ public class Email {
     private String email;
     private String  category;
     private String place;
+    private String groupName;
 
 }

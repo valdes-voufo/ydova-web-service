@@ -1,6 +1,6 @@
 package com.ydova.ahub.controller;
 
-import com.ydova.ahub.LoginDto;
+import com.ydova.ahub.dto.LoginDto;
 import com.ydova.ahub.entity.AppUser;
 import com.ydova.ahub.service.UserService;
 import com.ydova.cv.YdovaException;

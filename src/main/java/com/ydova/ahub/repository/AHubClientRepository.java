@@ -1,4 +1,4 @@
-package com.ydova.ahub.repositoty;
+package com.ydova.ahub.repository;
 
 import com.ydova.ahub.entity.AHubClient;
 import org.springframework.data.jpa.repository.JpaRepository;

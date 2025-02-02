@@ -1,18 +1,16 @@
 package com.ydova.ahub.entity;
 
 
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
 
-
-@Table(name = "user_table")
+@Table(name = "client_table")
 @Entity
 @Data
 @ToString
-public class AppUser {
+public class Client {
 
     @Id
     @GeneratedValue
@@ -21,6 +19,9 @@ public class AppUser {
     private  String password;
     private String lastname;
     private String firstname;
-    private String  key;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    @NotNull
+    private AppUser  creator;
 }

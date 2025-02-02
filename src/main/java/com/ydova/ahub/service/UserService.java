@@ -1,8 +1,8 @@
 package com.ydova.ahub.service;
 
-import com.ydova.ahub.LoginDto;
+import com.ydova.ahub.dto.LoginDto;
 import com.ydova.ahub.entity.AppUser;
-import com.ydova.ahub.repositoty.AppUserRepository;
+import com.ydova.ahub.repository.AppUserRepository;
 import com.ydova.cv.YdovaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
