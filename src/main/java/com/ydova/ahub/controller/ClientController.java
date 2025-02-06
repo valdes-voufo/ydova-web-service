@@ -5,15 +5,18 @@ import com.ydova.ahub.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 @Tag(name = "Client Operations", description = "Operations for managing clients")
 @RestController
 @RequestMapping("/clients")
+@CrossOrigin(origins = "*")
 public class ClientController {
 
     private final ClientService clientService;
@@ -39,7 +42,8 @@ public class ClientController {
 
     @Operation(summary = "Create a new client", description = "Creates a new client in the system")
     @PostMapping
-    public Client createClient(@Parameter(description = "Client object to be created", required = true) @RequestBody Client client) {
+    public Client createClient(@Parameter(description = "Client object to be created", required = true) @RequestBody @Valid Client client, Principal principal) {
+        System.out.println(client);
         return clientService.createClient(client);
     }
 

@@ -1,27 +1,25 @@
 package com.ydova.ahub.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
-
+@Table(name = "application_table")
 @Entity
-@Table(name = "ah_timeline_entry")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@ToString
 public class Application {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String  school;
+        @Id
+        @GeneratedValue
+        private Long id;
+        private String receiver;
+        private String sender;
+        private  boolean success;
 
 
 }

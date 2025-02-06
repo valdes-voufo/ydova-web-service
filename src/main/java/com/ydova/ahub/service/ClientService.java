@@ -39,7 +39,6 @@ public class ClientService {
             client.setPassword(clientDetails.getPassword());
             client.setLastname(clientDetails.getLastname());
             client.setFirstname(clientDetails.getFirstname());
-            client.setCreator(clientDetails.getCreator());
             return clientRepository.save(client);
         }).orElseThrow(() -> new RuntimeException("Client not found"));
     }

@@ -20,8 +20,4 @@ public class Client {
     private String lastname;
     private String firstname;
 
-    @ManyToOne
-    @JoinColumn(name = "creator_id")
-    @NotNull
-    private AppUser  creator;
 }

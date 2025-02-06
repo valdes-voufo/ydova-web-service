@@ -1,11 +1,14 @@
 package com.ydova.mail.service;
 
 import com.ydova.Log;
+import com.ydova.ahub.entity.Application;
+import com.ydova.ahub.repository.ApplicationRepository;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.dto.EmailSendingResponseDto;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,7 +25,12 @@ import java.util.Properties;
 @Service
 public class GmailService {
 
+private final ApplicationRepository applicationRepository;;
 
+@Autowired
+    public GmailService(ApplicationRepository applicationRepository) {
+        this.applicationRepository = applicationRepository;
+    }
 
     public List<EmailSendingResponseDto> sendEmail(EmailDto emailDto) {
         List<EmailSendingResponseDto> res = new ArrayList<>();
@@ -56,9 +64,19 @@ public class GmailService {
                 mailSender.send(preparator);
                 res.add(new EmailSendingResponseDto(recipient, true));
 
+                Application application = new Application();
+                application.setSender(emailDto.getSender());
+                application.setReceiver(recipient);
+                application.setSuccess(true);
+                applicationRepository.save(application);
                 // Log success
                 Log.info("Email successfully sent to " + recipient, this.getClass());
             } catch (MailException e) {
+                Application application = new Application();
+                application.setSender(emailDto.getSender());
+                application.setReceiver(recipient);
+                application.setSuccess(false);
+                applicationRepository.save(application);
                 res.add(new EmailSendingResponseDto(recipient, false));
                 Log.info("Exception occurred while sending email to " + recipient, this.getClass());
                 Log.info("Error: " + e.getMessage(), this.getClass());
