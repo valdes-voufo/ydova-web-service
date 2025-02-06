@@ -13,7 +13,7 @@ import java.util.Set;
 @Service
 public class UserService {
 
-    private Set<String> keys = Set.of("1209981c-f604-4d52-bbb4-9ae187ca4806", "5f7a6f6e-4b9b-467c-a90a-94bbe15602ec",
+    private final Set<String> keys = Set.of("1209981c-f604-4d52-bbb4-9ae187ca4806", "5f7a6f6e-4b9b-467c-a90a-94bbe15602ec",
             "a9546ece-dc24-4615-9d72-f5b434465481");
 
     private final AppUserRepository userRepository;

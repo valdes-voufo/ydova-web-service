@@ -7,6 +7,7 @@ import com.ydova.ahub.repository.EmailRepository;
 import com.ydova.cv.YdovaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.emitter.Emitable;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +23,13 @@ public class EmailService {
 
     // Add a new school
     public Email create(Email dto) throws YdovaException {
-        if (!repository.findByEmail(dto.getEmail()).isEmpty()) {
-            throw new YdovaException(String.format("Email %s already exists", dto.getEmail()));
+        if (repository.findByEmail(dto.getEmail()).isEmpty()) {
+            List<Email> mails = repository.findByEmail(dto.getEmail());
+            Email found = mails.get(0);
+            found.setEmail(dto.getEmail());
+            found.setPlace(dto.getPlace());
+            found.setCategory(dto.getCategory());
+            found.setGroupName(dto.getGroupName());
         }
         return repository.save(dto);  // Save and return the saved school
     }
@@ -56,12 +62,10 @@ public class EmailService {
         return repository.findAll();
     }
 
-    public void createAll( List<Email> email) {
+    public void createAll( List<Email> email) throws YdovaException {
 
         for (Email e : email) {
-            if (repository.findByEmail(e.getEmail()).isEmpty()) {
-                repository.save(e);
-            }
+           create(e);
         }
 
 
