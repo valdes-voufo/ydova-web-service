@@ -19,6 +19,7 @@ public class EmailService {
     @Autowired
     public EmailService(EmailRepository repository) {
         this.repository = repository;
+
     }
 
     // Add a new school
