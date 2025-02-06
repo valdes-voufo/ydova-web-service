@@ -30,6 +30,7 @@ public class EmailService {
             found.setPlace(dto.getPlace());
             found.setCategory(dto.getCategory());
             found.setGroupName(dto.getGroupName());
+           return repository.save(found);
         }
         return repository.save(dto);  // Save and return the saved school
     }
