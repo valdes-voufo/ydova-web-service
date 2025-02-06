@@ -2,7 +2,9 @@ package com.ydova.mail.service;
 
 import com.ydova.Log;
 import com.ydova.ahub.entity.Application;
+import com.ydova.ahub.entity.Email;
 import com.ydova.ahub.repository.ApplicationRepository;
+import com.ydova.ahub.service.EmailService;
 import com.ydova.mail.dto.EmailDto;
 import com.ydova.mail.dto.EmailSendingResponseDto;
 import jakarta.mail.Message;
@@ -25,16 +27,24 @@ import java.util.Properties;
 @Service
 public class GmailService {
 
-private final ApplicationRepository applicationRepository;;
+private final ApplicationRepository applicationRepository;
+private final EmailService emailService;
 
 @Autowired
-    public GmailService(ApplicationRepository applicationRepository) {
+    public GmailService(ApplicationRepository applicationRepository, EmailService emailService) {
         this.applicationRepository = applicationRepository;
+        this.emailService = emailService;
     }
 
     public List<EmailSendingResponseDto> sendEmail(EmailDto emailDto) {
         List<EmailSendingResponseDto> res = new ArrayList<>();
-        String[] emailList = emailDto.getRecipients().split(",");
+        String[] emailList ;
+        if (emailDto.getRecipients().equals("ALL_PFLEGE_ALL")){
+         emailList =   emailService.readAll().stream().map(Email::getEmail).toArray(String[]::new);
+        }else {
+             emailList = emailDto.getRecipients().split(",");
+        }
+
         for (String recipient : emailList) {
             MimeMessagePreparator preparator = mimeMessage -> {
                 // Use MimeMessageHelper for easier email construction
