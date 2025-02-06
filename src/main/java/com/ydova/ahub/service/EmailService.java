@@ -23,7 +23,7 @@ public class EmailService {
 
     // Add a new school
     public Email create(Email dto) throws YdovaException {
-        if (repository.findByEmail(dto.getEmail()).isEmpty()) {
+        if (!repository.findByEmail(dto.getEmail()).isEmpty()) {
             List<Email> mails = repository.findByEmail(dto.getEmail());
             Email found = mails.get(0);
             found.setEmail(dto.getEmail());
