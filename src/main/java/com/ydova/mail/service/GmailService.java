@@ -6,6 +6,7 @@ import com.ydova.ahub.entity.Email;
 import com.ydova.ahub.repository.ApplicationRepository;
 import com.ydova.ahub.service.EmailService;
 import com.ydova.mail.dto.EmailDto;
+import com.ydova.mail.dto.EmailDto2;
 import com.ydova.mail.dto.EmailSendingResponseDto;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -18,8 +19,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -28,22 +31,19 @@ import java.util.Properties;
 public class GmailService {
 
 private final ApplicationRepository applicationRepository;
-private final EmailService emailService;
+
 
 @Autowired
-    public GmailService(ApplicationRepository applicationRepository, EmailService emailService) {
+    public GmailService(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
-        this.emailService = emailService;
     }
 
-    public List<EmailSendingResponseDto> sendEmail(EmailDto emailDto) {
+    public List<EmailSendingResponseDto> sendEmail(EmailDto2 emailDto) {
         List<EmailSendingResponseDto> res = new ArrayList<>();
         String[] emailList ;
-        if (emailDto.getRecipients().equals("ALL_PFLEGE_ALL")){
-         emailList =   emailService.readAll().stream().map(Email::getEmail).toArray(String[]::new);
-        }else {
-             emailList = emailDto.getRecipients().split(",");
-        }
+
+        emailList = emailDto.getRecipients().split(",");
+
 
         for (String recipient : emailList) {
             MimeMessagePreparator preparator = mimeMessage -> {
@@ -60,6 +60,7 @@ private final EmailService emailService;
                 if (emailDto.getAttachments() != null) {
                     for (File att : emailDto.getAttachments()) {
                         // Use FileSystemResource to read the file
+
                         FileSystemResource file = new FileSystemResource(att);
                         helper.addAttachment(att.getName(), file);  // You can change MIME type as needed
                     }
@@ -112,5 +113,15 @@ private final EmailService emailService;
         props.put("mail.debug", "false");
 
         return mailSender;
+    }
+
+    private File convertMultipartFileToFile(MultipartFile multipartFile) {
+        File file = new File(System.getProperty("java.io.tmpdir") + File.separator + multipartFile.getOriginalFilename());
+        try {
+            multipartFile.transferTo(file);
+        } catch (IOException e) {
+            Log.error("Error while converting the MultipartFile to a File");
+        }
+        return file;
     }
 }
