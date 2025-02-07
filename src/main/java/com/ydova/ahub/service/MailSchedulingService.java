@@ -32,7 +32,7 @@ public class MailSchedulingService {
     }
 
 
-    @Scheduled(fixedRate = 60000) // Runs every day at midnight
+    @Scheduled(fixedRate = 3600000) // Runs every day at midnight
     @Transactional
         public void performDailyTask() {
             processAndRemoveJobs();
@@ -62,7 +62,7 @@ public class MailSchedulingService {
 
             // Step 3.2: Select the top 300 jobs
             List<ApplicationJob> top300Jobs = sortedJobs.stream()
-                    .limit(300)
+                    .limit(15)
                     .collect(Collectors.toList());
 
             // Step 3.3: Perform the function on each job (example: sending an email)
