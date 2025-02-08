@@ -62,7 +62,7 @@ public class MailSchedulingService {
 
             // Step 3.2: Select the top 300 jobs
             List<ApplicationJob> top300Jobs = sortedJobs.stream()
-                    .limit(15)
+                    .limit(20)
                     .collect(Collectors.toList());
 
             // Step 3.3: Perform the function on each job (example: sending an email)
