@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ydova.Log;
 import com.ydova.cv.YdovaException;
 import com.ydova.mail.dto.EmailDto;
+import com.ydova.mail.dto.EmailDto2;
 import com.ydova.mail.dto.EmailSendingResponseDto;
 import com.ydova.mail.service.GmailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,26 +40,27 @@ public class EmailSendingController {
             @ApiResponse(responseCode = "400", description = "Invalid email data"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
+
     @PostMapping("/send-mail")
     public List<EmailSendingResponseDto> sendMail(
             @RequestPart(value = "files", required = false) MultipartFile[] files,
             @RequestPart("content") String otherData) throws YdovaException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        EmailDto email;
+        EmailDto2 email;
         try {
-            email = objectMapper.readValue(otherData, EmailDto.class);
+            email = objectMapper.readValue(otherData, EmailDto2.class);
         } catch (JsonProcessingException e) {
             throw new YdovaException(e.getMessage());
         }
 
         // Validate the EmailDto object
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<EmailDto>> violations = validator.validate(email);
+        Set<ConstraintViolation<EmailDto2>> violations = validator.validate(email);
 
         if (!violations.isEmpty()) {
             StringBuilder errorMessage = new StringBuilder("Validation errors:");
-            for (ConstraintViolation<EmailDto> violation : violations) {
+            for (ConstraintViolation<EmailDto2> violation : violations) {
                 errorMessage.append(" ").append(violation.getPropertyPath())
                         .append(": ").append(violation.getMessage()).append(";");
             }

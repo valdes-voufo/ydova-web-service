@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailDto {
+public class EmailDto2 {
 
     @NotBlank(message = "Sender email is required")
     @Email(message = "sender email should be valid")
@@ -33,7 +33,7 @@ public class EmailDto {
     @NotNull
     private String body;
 
-    private List<MultipartFile> attachments;
+    private List<File> attachments;
 
     @NotBlank(message = "The gmail password of the recipient is required is required")
     @NotNull

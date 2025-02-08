@@ -7,13 +7,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-
-
-
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @AllArgsConstructor
 @SpringBootApplication
+@EnableScheduling
 @OpenAPIDefinition(
         info = @Info(title = "User API", version = "1.0", description = "User Authentication APIs")
 )
