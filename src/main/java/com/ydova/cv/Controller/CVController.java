@@ -5,6 +5,7 @@ import com.ydova.ahub.entity.AHubClient;
 import com.ydova.cv.YdovaException;
 import com.ydova.cv.service.util.DefaultCVGenerator;
 import com.ydova.mail.dto.EmailDto;
+import com.ydova.mail.dto.EmailDto2;
 import com.ydova.mail.service.GmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,12 +47,12 @@ public class CVController {
         Log.info("sending mail:"+cv,this.getClass());
 
 
-        EmailDto emailDto = EmailDto.builder()
+        EmailDto2 emailDto = EmailDto2.builder()
                 .sender("valdesvoufo2@gmail.com")
                 .recipients("valdesvoufo8@gmail.com")
                 .body("Your CV build by YDOVA")
                 .subject("Your CV Build by Ydova")
-                .attachments(List.of(cv))
+               // .attachments(List.of(cv))
                 .password("graqobggufjcfdsp").build();
 
         gmailService.sendEmail(emailDto);
