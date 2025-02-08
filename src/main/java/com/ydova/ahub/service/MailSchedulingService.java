@@ -62,7 +62,7 @@ public class MailSchedulingService {
 
             // Step 3.2: Select the top 300 jobs
             List<ApplicationJob> top300Jobs = sortedJobs.stream()
-                    .limit(20)
+                    .limit(19)
                     .collect(Collectors.toList());
 
             // Step 3.3: Perform the function on each job (example: sending an email)
@@ -77,7 +77,7 @@ public class MailSchedulingService {
     private void performFunctionOnJob(ApplicationJob job)  {
 
 
-        EmailDto2 emailDto2 = null;
+        EmailDto2 emailDto2;
         try {
             emailDto2 = applicationService.getEmailApplicationByWithoutRecipient(job.getEmailApplicationID());
         } catch (YdovaException e) {

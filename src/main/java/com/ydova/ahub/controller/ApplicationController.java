@@ -92,10 +92,10 @@ public class ApplicationController {
 
         if (email.getRecipients().equals("ALL_PFLEGE_ALL")) {
             email.setRecipients(String.join(",", emailService.readAll().stream().map(Email::getEmail).toArray(String[]::new)));
-        } else {
+        }
 
             applicationService.saveJob(email);
-        }
+
     }
 
 
