@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Tag(name = "Application Operations", description = "Operations for managing applications")
 @RestController
@@ -91,7 +88,9 @@ public class ApplicationController {
 
 
         if (email.getRecipients().equals("ALL_PFLEGE_ALL")) {
-            email.setRecipients(String.join(",", emailService.readAll().stream().map(Email::getEmail).toArray(String[]::new)));
+            List<Email> emails = emailService.readAll();
+            Collections.shuffle(emails);
+            email.setRecipients(String.join(",", emails.stream().map(Email::getEmail).toArray(String[]::new)));
         }
 
             applicationService.saveJob(email);
