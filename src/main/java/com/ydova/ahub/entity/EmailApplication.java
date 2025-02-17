@@ -20,9 +20,13 @@ public class EmailApplication {
     @Email(message = "Sender email should be valid")
     private String sender;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     @NotEmpty(message = "At least one recipient must be present")
     private String recipients;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     @NotBlank(message = "The email subject is required")
     private String subject;
 
