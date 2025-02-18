@@ -32,7 +32,7 @@ public class MailSchedulingService {
     }
 
 
-    @Scheduled(fixedRate = 3600000) // Runs every day at midnight
+    @Scheduled(fixedRate = 2000000)
     @Transactional
         public void performDailyTask() {
             processAndRemoveJobs();
@@ -47,7 +47,8 @@ public class MailSchedulingService {
 
     public void processAndRemoveJobs() {
         // Step 1: Retrieve all ApplicationJobs from the database
-        List<ApplicationJob> allJobs = applicationJobRepository.findAll();
+        List<ApplicationJob> allJobs = applicationJobRepository.findAll().stream().
+                filter(job->!job.getSender().equals("cabrelkamtcheu@gmail.com")).toList();
 
         // Step 2: Group the jobs by sender
         Map<String, List<ApplicationJob>> jobsGroupedBySender = allJobs.stream()
@@ -62,7 +63,7 @@ public class MailSchedulingService {
 
             // Step 3.2: Select the top 300 jobs
             List<ApplicationJob> top300Jobs = sortedJobs.stream()
-                    .limit(19)
+                    .limit(10)
                     .collect(Collectors.toList());
 
             // Step 3.3: Perform the function on each job (example: sending an email)
