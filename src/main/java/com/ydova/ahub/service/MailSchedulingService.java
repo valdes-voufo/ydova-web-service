@@ -47,8 +47,7 @@ public class MailSchedulingService {
 
     public void processAndRemoveJobs() {
         // Step 1: Retrieve all ApplicationJobs from the database
-        List<ApplicationJob> allJobs = applicationJobRepository.findAll().stream().
-                filter(job->!job.getSender().equals("cabrelkamtcheu@gmail.com")).toList();
+        List<ApplicationJob> allJobs = applicationJobRepository.findAll();
 
         // Step 2: Group the jobs by sender
         Map<String, List<ApplicationJob>> jobsGroupedBySender = allJobs.stream()
