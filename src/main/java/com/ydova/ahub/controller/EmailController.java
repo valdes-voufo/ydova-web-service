@@ -69,4 +69,17 @@ public class EmailController {
         emailService.remove(id);
         return "School Successfully deleted";
     }
+
+
+    @Operation(summary = "Delete a school email", description = "Removes a school email from the system using its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Email successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Email not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @DeleteMapping("/emails/")
+    public String remove(List<String> emails) {
+        emailService.removeALl(emails);
+        return "School Successfully deleted";
+    }
 }

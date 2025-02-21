@@ -72,4 +72,13 @@ public class EmailService {
 
 
     }
+
+    public void removeALl(List<String> emails) {
+        for (String email : emails) {
+            if (!repository.findByEmail(email).isEmpty()) {
+                Email email1 = repository.findByEmail(email).get(0);
+                remove(email1.getId());
+            }
+        }
+    }
 }
