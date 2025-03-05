@@ -25,7 +25,7 @@ public class ApplicationJob {
         @NotNull @Email
         private  String sender;
 
-        @Email @NotNull
+        @NotNull
         private String receiver;
 
 }
