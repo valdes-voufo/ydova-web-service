@@ -77,9 +77,8 @@ public class EmailController {
             @ApiResponse(responseCode = "404", description = "Email not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @DeleteMapping("/emails/")
-    public String remove(List<String> emails) {
-        emailService.removeALl(emails);
-        return "School Successfully deleted";
+    @DeleteMapping("/emails")
+    public List<String> remove(@RequestBody List<String> emails) {
+      return   emailService.removeALl(emails);
     }
 }

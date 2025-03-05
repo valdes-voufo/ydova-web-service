@@ -2,36 +2,33 @@ stages:
   - build
   - deploy
 
-
-variables:
-  IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
-
-# Build Stage
+# Étape de build (création de l'image Docker)
 build:
   stage: build
+  image: maven:3.6.3-jdk-11
   script:
-    - docker buildx build -t registry.git.rwth-aachen.de/ydova/ydova-package-registry --load .
-
-  #  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-  #  - docker push registry.git.rwth-aachen.de/ydova/ydova-package-registry
+    - mvn clean package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE .
   only:
-    - main
+    - main  # Vous pouvez changer cela pour une branche spécifique
 
-# Deploy Stage
+# Étape de déploiement (transfert et exécution du conteneur Docker sur EC2)
 deploy:
   stage: deploy
+  image: docker:latest
   script:
-    # Ensure an SSH key is loaded into the agent
-  #  - eval $(ssh-agent -s)
-  #  - echo "$SSH_PRIVATE_KEY" | ssh-add - > /dev/null
+    # Configurer Docker sur le runner
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
 
-    # SSH into EC2 and deploy Docker container
-  #  - ssh -o StrictHostKeyChecking=no -p 22 $EC2_USER@$EC2_IP
-  #  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" registry.git.rwth-aachen.de
-  #  - docker pull registry.git.rwth-aachen.de/ydova/ydova-package-registry
-    - docker stop ydova-web-service || true
-    - docker rm ydova-web-service || true
-    - docker run -d --name ydova-web-service -p 8080:8080 registry.git.rwth-aachen.de/ydova/ydova-package-registry
-
+    # Connexion SSH à l'instance EC2 et déploiement de l'image Docker
+    - ssh -o StrictHostKeyChecking=no ec2-user@$EC2_IP << 'EOF'
+      docker pull $CI_REGISTRY_IMAGE
+      docker stop app1 || true
+      docker rm app1 || true
+      docker run -d -p 8081:8080 --name app1 $CI_REGISTRY_IMAGE
+      EOF
   only:
-    - main
+    - main  # Vous pouvez changer cela pour une branche spécifique

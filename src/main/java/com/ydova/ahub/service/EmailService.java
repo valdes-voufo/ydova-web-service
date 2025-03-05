@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.emitter.Emitable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,12 +74,15 @@ public class EmailService {
 
     }
 
-    public void removeALl(List<String> emails) {
+    public List<String> removeALl(List<String> emails) {
+        List<String> res = new ArrayList<>();
         for (String email : emails) {
             if (!repository.findByEmail(email).isEmpty()) {
                 Email email1 = repository.findByEmail(email).get(0);
                 remove(email1.getId());
+                res.add(email);
             }
         }
+        return  res ;
     }
 }
