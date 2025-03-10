@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +51,7 @@ public class MailSchedulingService {
         List<ApplicationJob> allJobs = applicationJobRepository.findAll();
 
         // Step 2: Group the jobs by sender
-        Map<String, List<ApplicationJob>> jobsGroupedBySender = allJobs.stream()
+        Map<String, List<ApplicationJob>> jobsGroupedBySender = allJobs.stream().filter(job -> !Objects.equals(job.getSender(), "mawutokoumi87@gmail.com"))
                 .collect(Collectors.groupingBy(ApplicationJob::getSender));
 
         // Step 3: Iterate over each sender group and process the jobs

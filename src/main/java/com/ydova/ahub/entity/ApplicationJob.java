@@ -22,7 +22,6 @@ public class ApplicationJob {
         @NotNull
         private Long emailApplicationID;
 
-
         @NotNull @Email
         private  String sender;
 
